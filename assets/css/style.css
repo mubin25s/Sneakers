@@ -1,17 +1,17 @@
 :root {
-    /* Bluish-Black-Ash Theme */
-    --color-primary: #0f172a;      /* Deep Bluish Black */
-    --color-primary-light: #1e293b; 
-    --color-primary-dark: #020617;
+    /* Red & Ash Black Theme */
+    --color-primary: #0a0a0a;      /* Deep Ash Black (Neutral) */
+    --color-primary-light: #262626; /* Lighter Ash Gray */
+    --color-primary-dark: #000000;
     
-    --color-accent: #64748b;       /* Ash/Gray */
-    --color-accent-light: #94a3b8;
+    --color-accent: #a3a3a3;       /* Neutral Gray */
+    --color-accent-light: #d4d4d4;
     
-    --color-cta: #22d3ee;          /* Muted Cyan */
-    --color-cta-hover: #06b6d4;
+    --color-cta: #ef4444;          /* Vibrant Red */
+    --color-cta-hover: #dc2626;    /* Darker Red */
     
     --color-white: #ffffff;
-    --color-text: #f8fafc;
+    --color-text: #fafafa;
     
     --font-main: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -91,8 +91,8 @@ ul {
 
 /* Header */
 header {
-    background-color: rgba(30, 41, 59, 0.95); /* primary-light with opacity */
-    backdrop-filter: blur(5px);
+    background-color: rgba(10, 10, 10, 0.95); /* Matches primary dark/neutral */
+    backdrop-filter: blur(10px);
     position: fixed;
     top: 0;
     left: 0;
