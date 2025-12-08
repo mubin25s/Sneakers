@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart - ShoeZone Shoe Store</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <button id="global-back-btn" class="back-btn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg></button>
+            <a href="index.html" class="logo">ShoeZone<span class="text-cta">.</span></a>
+        </div>
+    </header>
+    <div class="main-spacer"></div>
+
+    <main class="container" style="padding-top: 3rem;">
+        <h1 style="margin-bottom: 2rem;">Your Cart</h1>
+        <div id="cart-container">
+            <!-- Loading or Empty State initial -->
+             <div style="background: var(--color-primary-light); padding: 2rem; border-radius: 0.5rem; text-align: center;">
+                <p class="text-accent">Loading cart...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/header-auth.js"></script>
+    <script type="module">
+
+        import { cartService } from './assets/js/cart-service.js';
+
+        const container = document.getElementById('cart-container');
+
+        function renderCart() {
+            const cart = cartService.getCart();
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div style="background: var(--color-primary-light); padding: 2rem; border-radius: 0.5rem; text-align: center;">
+                        <p class="text-accent" style="margin-bottom: 1rem;">Your cart is currently empty.</p>
+                        <a href="shop.html" class="btn btn-cta">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const total = cartService.getTotal();
+
+            let html = `
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${cart.map(item => `
+                        <div style="display: flex; gap: 1rem; background: var(--color-primary-light); padding: 1rem; border-radius: 0.5rem; align-items: center;">
+                            <img src="${item.image}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.3rem;">
+                            <div style="flex: 1;">
+                                <h3 style="font-weight: bold; font-size: 1.1rem;">${item.name}</h3>
+                                <p class="text-accent" style="font-size: 0.9rem;">Size: ${item.size}</p>
+                                <p class="text-cta" style="font-weight: bold;">$${item.price}</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="display: flex; align-items: center; border: 1px solid var(--color-accent); border-radius: 0.3rem;">
+                                    <button class="btn q-btn" data-id="${item.id}" data-size="${item.size}" data-action="minus" style="padding: 0.2rem 0.6rem;">-</button>
+                                    <span style="padding: 0 0.5rem;">${item.quantity}</span>
+                                    <button class="btn q-btn" data-id="${item.id}" data-size="${item.size}" data-action="plus" style="padding: 0.2rem 0.6rem;">+</button>
+                                </div>
+                                <button class="btn rm-btn" data-id="${item.id}" data-size="${item.size}" style="color: var(--color-accent-light); font-size: 0.9rem; text-decoration: underline;">Remove</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-end;">
+                     <div style="font-size: 1.5rem;">Total: <span class="text-cta" style="font-weight: bold;">$${total}</span></div>
+                     <button id="checkout-btn" class="btn btn-cta" style="padding: 1rem 3rem; font-size: 1.1rem;">Proceed to Checkout</button>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+
+            // Wire up buttons
+            document.querySelectorAll('.q-btn').forEach(btn => {
+                btn.onclick = () => {
+                   const id = parseInt(btn.dataset.id);
+                   const size = btn.dataset.size;
+                   const action = btn.dataset.action;
+                   const currentItem = cart.find(i => i.id === id && i.size === size);
+                   if (currentItem) {
+                       const newQ = action === 'plus' ? currentItem.quantity + 1 : currentItem.quantity - 1;
+                       if (newQ > 0) {
+                           cartService.updateQuantity(id, size, newQ);
+                       } else {
+                           cartService.removeItem(id, size);
+                       }
+                       renderCart();
+                   }
+                };
+            });
+
+            document.querySelectorAll('.rm-btn').forEach(btn => {
+                btn.onclick = () => {
+                    cartService.removeItem(parseInt(btn.dataset.id), btn.dataset.size);
+                    renderCart();
+                };
+            });
+
+            const checkoutBtn = document.getElementById('checkout-btn');
+            if(checkoutBtn) {
+                checkoutBtn.onclick = () => {
+                    alert('Checkout logic would go here. Mock purchase successful!');
+                    cartService.clearCart();
+                    renderCart();
+                };
+            }
+        }
+
+        renderCart();
+    </script>
+
+</body>
+</html>

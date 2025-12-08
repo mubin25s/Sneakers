@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ShoeZone Shoe Store</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-inner">
+            <button id="global-back-btn" class="back-btn" aria-label="Go Back">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            
+            <a href="index.html" class="logo">
+                ShoeZone<span class="text-cta">.</span>
+            </a>
+            
+            <div class="nav-actions flex gap-4 items-center">
+                 <a href="login.html" class="text-accent hover:text-cta" style="font-size: 0.9rem;">Login</a>
+                 <a href="cart.html" style="position: relative;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="main-spacer"></div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div style="text-align: center; padding: 6rem 0;">
+            <h1 style="font-size: 3rem; margin-bottom: 1.5rem; font-weight: 800;">
+                Step Into the <br><span class="text-cta">Future of Footwear.</span>
+            </h1>
+            <p class="text-accent" style="max-width: 600px; margin: 0 auto 3rem;">
+                Experience the perfect blend of style, comfort, and performance. 
+                Our Bluish-Black collection is designed to make a statement.
+            </p>
+            
+            <div style="display: flex; justify-content: center; gap: 1.5rem;">
+                <a href="shop.html" class="btn btn-cta">Shop All</a>
+                <a href="about.html" class="btn" style="border: 1px solid var(--color-accent); color: white;">About Us</a>
+            </div>
+        </div>
+        
+        <!-- Featured Sectors -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 2rem; font-weight: bold;">Explore Sectors</h2>
+        </div>
+        <div id="sector-grid" class="flex flex-col gap-4 md-flex-row" style="margin-bottom: 6rem;">
+             <p class="text-accent" style="width:100%; text-align:center;">Loading sectors...</p>
+        </div>
+
+        <!-- Featured Drops -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 2rem; font-weight: bold;">Featured Drops</h2>
+            <p class="text-accent">Latest arrivals fresh from the lab.</p>
+        </div>
+        <div id="featured-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 4rem;">
+            <p class="text-accent" style="width:100%; text-align:center;">Loading drops...</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="grid grid-cols-1 md-grid-cols-3 gap-8" style="display: grid; gap: 2rem;">
+                  <div>
+                      <h3 class="font-bold mb-4 text-white">ShoeZone<span class="text-cta">.</span></h3>
+                  </div>
+                  <div>
+                      <h4 class="font-semibold mb-4 text-accent-light">Links</h4>
+                      <ul class="space-y-2">
+                          <li><a href="shop.html" class="text-accent text-sm">Shop</a></li>
+                          <li><a href="about.html" class="text-accent text-sm">About</a></li>
+                          <li><a href="login.html" class="text-accent text-sm">Login</a></li>
+                      </ul>
+                  </div>
+                  <div>
+                      <!-- Newsletter -->
+                  </div>
+            </div>
+            <div class="text-center text-accent" style="margin-top: 2rem; font-size: 0.8rem;">
+                &copy; 2024 ShoeZone Shoe.
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/header-auth.js"></script>
+    <script type="module">
+        import { fetchProducts, fetchCategories } from './assets/js/api-service.js';
+
+
+        // Load Sectors/Categories on Home Page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load Categories
+            fetchCategories().then(cats => {
+                const grid = document.getElementById('sector-grid');
+                if(cats.length > 0) {
+                    grid.innerHTML = cats.slice(0, 3).map(c => `
+                        <a href="shop.html?category=${c.id}" class="flex-1" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url('${c.image}'), var(--color-primary-light); background-size: cover; background-position: center; height: 300px; border-radius: 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <h3 style="font-size: 1.5rem; font-weight: bold; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${c.name}</h3>
+                        </a>
+                    `).join('');
+                } else {
+                        grid.innerHTML = '<p>No sectors available.</p>';
+                }
+            });
+
+            // Load Featured Products
+            fetchProducts().then(products => {
+                const grid = document.getElementById('featured-grid');
+                // Show first 4 products
+                const featured = products.slice(0, 4);
+                
+                if(featured.length > 0) {
+                    grid.innerHTML = featured.map(p => `
+                        <div style="background: var(--color-primary-light); border-radius: 0.5rem; overflow: hidden; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <a href="product.html?id=${p.id}" style="display:block; height: 200px; overflow: hidden;">
+                                <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </a>
+                            <div style="padding: 1rem;">
+                                <div style="font-size: 0.8rem; color: var(--color-accent); text-transform: uppercase;">${p.brand}</div>
+                                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700;">
+                                    <a href="product.html?id=${p.id}">${p.name}</a>
+                                </h3>
+                                <p class="text-cta" style="font-weight: bold;">$${p.price}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                        grid.innerHTML = '<p class="text-accent">No drops available.</p>';
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

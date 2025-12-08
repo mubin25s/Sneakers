@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - ShoeZone Shoe Store</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <button id="global-back-btn" class="back-btn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg></button>
+            <a href="index.html" class="logo">ShoeZone<span class="text-cta">.</span></a>
+            <div class="nav-actions">
+                 <a href="cart.html" style="position: relative;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="main-spacer"></div>
+
+    <main class="container" style="padding-top: 4rem;">
+        <div id="product-detail" class="flex flex-col md:flex-row gap-8">
+            <div style="flex: 1;">
+                 <div style="background: var(--color-primary-light); height: 400px; display: flex; align-items: center; justify-content: center; border-radius: 1rem;">
+                     <!-- Image Placeholder -->
+                     <img id="p-image" src="" alt="Product" style="max-height: 80%; display:none;">
+                     <span id="p-loading" class="text-accent">Loading...</span>
+                 </div>
+            </div>
+            <div style="flex: 1;">
+                <h1 id="p-name" style="font-size: 2.5rem; margin-bottom: 1rem;"></h1>
+                <p id="p-price" class="text-cta" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem;"></p>
+                <p id="p-desc" class="text-accent" style="margin-bottom: 2rem;"></p>
+                
+                <div style="margin-bottom: 2rem;">
+                    <label class="text-accent" style="display: block; margin-bottom: 0.5rem;">Size</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn size-btn" style="border: 1px solid var(--color-accent); color: var(--color-accent);">40</button>
+                        <button class="btn size-btn" style="border: 1px solid var(--color-accent); color: var(--color-accent);">41</button>
+                        <button class="btn size-btn" style="border: 1px solid var(--color-accent); color: var(--color-accent);">42</button>
+                        <button class="btn size-btn" style="border: 1px solid var(--color-accent); color: var(--color-accent);">43</button>
+                    </div>
+
+                </div>
+
+                <button id="add-to-cart-btn" class="btn btn-cta" style="width: 100%; padding: 1rem;">Add to Cart</button>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/header-auth.js"></script>
+    <script type="module">
+        import { fetchProducts } from './assets/js/api-service.js';
+
+        import { cartService } from './assets/js/cart-service.js';
+
+        let currentProduct = null;
+        let selectedSize = null;
+
+        // Parse ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('id');
+
+        if(pid) {
+             // Fetch specific product by ID
+             fetchProducts()
+                .then(products => {
+                    // Mock finding logic
+                    const product = products.find(p => p.id == pid) || products[0]; 
+                    
+                    if(product) {
+                        currentProduct = product;
+                        document.getElementById('p-name').innerText = product.name;
+                        document.getElementById('p-price').innerText = '$' + product.price;
+                        document.getElementById('p-desc').innerText = product.description;
+                        document.getElementById('p-image').src = product.image;
+                        document.getElementById('p-image').style.display = 'block';
+                        document.getElementById('p-loading').style.display = 'none';
+                    } else {
+                        document.getElementById('p-name').innerText = "Product not found";
+                        document.getElementById('p-loading').style.display = 'none';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('p-name').innerText = "Error loading product";
+                });
+        }
+
+        // Size Selection Logic
+        const sizeBtns = document.querySelectorAll('.size-btn');
+        sizeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                sizeBtns.forEach(b => {
+                    b.style.background = 'transparent';
+                    b.style.color = 'var(--color-accent)';
+                    b.style.borderColor = 'var(--color-accent)';
+                });
+                e.target.style.background = 'var(--color-cta)';
+                e.target.style.color = 'black';
+                e.target.style.borderColor = 'var(--color-cta)';
+                selectedSize = e.target.innerText;
+            });
+        });
+
+        // Add to Cart Logic
+        document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+            if(!currentProduct) return;
+            if(!selectedSize) {
+                alert('Please select a size first.');
+                return;
+            }
+
+            cartService.addItem(currentProduct, selectedSize);
+            alert(`${currentProduct.name} (Size: ${selectedSize}) added to cart!`);
+        });
+
+    </script>
+
+
+</body>
+</html>

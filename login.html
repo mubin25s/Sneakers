@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ShoeZone Shoe Store</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-inner">
+            <button id="global-back-btn" class="back-btn" aria-label="Go Back">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <a href="index.html" class="logo">ShoeZone<span class="text-cta">.</span></a>
+            <div class="nav-actions"></div>
+        </div>
+    </header>
+    <div class="main-spacer"></div>
+
+    <main class="container" style="max-width: 400px; padding-top: 4rem;">
+        <div class="auth-container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Welcome Back</h2>
+            
+            <form id="login-form">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-accent);">Email</label>
+                    <input type="email" id="email" class="input-field" placeholder="Enter your email" required 
+                           style="width: 100%; padding: 0.75rem; background: var(--color-primary-light); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 0.5rem;">
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--color-accent);">Password</label>
+                    <input type="password" id="password" class="input-field" placeholder="Enter your password" required
+                           style="width: 100%; padding: 0.75rem; background: var(--color-primary-light); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 0.5rem;">
+                </div>
+                
+                <button type="submit" class="btn btn-cta" style="width: 100%;">Login</button>
+                
+                <p style="text-align: center; margin-top: 1.5rem; color: var(--color-accent);">
+                    Don't have an account? <a href="register.html" style="color: var(--color-cta);">Register</a>
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script type="module">
+        import { authService } from './assets/js/auth-service.js';
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = e.target.querySelector('button');
+
+            btn.innerText = 'Logging in...';
+            btn.disabled = true;
+
+            const res = await authService.login(email, password);
+
+            if (res.success) {
+                // alert('Login Successful!');
+                window.location.href = 'index.html';
+            } else {
+                alert(res.message);
+                btn.innerText = 'Login';
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+</html>

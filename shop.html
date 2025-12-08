@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - ShoeZone Shoe Store</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .filter-section { margin-bottom: 2rem; }
+        .filter-title { font-weight: bold; margin-bottom: 0.5rem; color: var(--color-cta); }
+        .filter-list li { margin-bottom: 0.3rem; cursor: pointer; color: var(--color-accent-light); transition: color 0.3s; }
+        .filter-list li:hover, .filter-list li.active { color: white; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <button id="global-back-btn" class="back-btn"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg></button>
+            <a href="index.html" class="logo">ShoeZone<span class="text-cta">.</span></a>
+            <div class="nav-actions">
+                <a href="cart.html" style="position: relative;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span id="cart-count" style="position: absolute; top: -5px; right: -5px; background: var(--color-cta); color: black; font-size: 0.7rem; padding: 0.1rem 0.3rem; border-radius: 50%;">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="main-spacer"></div>
+
+    <main class="container md-flex-row" style="padding-top: 2rem; display: flex; gap: 2rem; flex-direction: column;">
+
+        
+        <!-- Sidebar -->
+        <aside style="min-width: 200px;">
+            <div class="filter-section">
+                <h3 class="filter-title">Categories</h3>
+                <ul id="category-list" class="filter-list">
+                    <li data-val="" class="active">All</li>
+                    <!-- Filled by JS -->
+                </ul>
+            </div>
+            
+            <div class="filter-section">
+                <h3 class="filter-title">Brands</h3>
+                <ul id="brand-list" class="filter-list">
+                    <li data-val="" class="active">All</li>
+                    <!-- Filled by JS -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Product Grid Area -->
+        <div style="flex: 1;">
+            <h2 id="page-title" style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">All Sneakers</h2>
+            
+            <div id="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem;">
+                <p class="text-accent">Loading products...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/header-auth.js"></script>
+    <script type="module">
+        import { fetchProducts, fetchCategories, fetchBrands } from './assets/js/api-service.js';
+
+
+        let currentCat = '';
+        let currentBrand = '';
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+            loadBrands();
+            loadProducts();
+        });
+
+        function loadCategories() {
+            fetchCategories().then(cats => {
+                const list = document.getElementById('category-list');
+                cats.forEach(c => {
+                    const li = document.createElement('li');
+                    li.textContent = c.name;
+                    li.onclick = () => filterBy('category', c.id, li);
+                    list.appendChild(li);
+                });
+            });
+        }
+
+        function loadBrands() {
+            fetchBrands().then(brands => {
+                const list = document.getElementById('brand-list');
+                brands.forEach(b => {
+                    const li = document.createElement('li');
+                    li.textContent = b;
+                    li.onclick = () => filterBy('brand', b, li);
+                    list.appendChild(li);
+                });
+            });
+        }
+
+        function filterBy(type, val, el) {
+            // Update active state UI
+            if(type === 'category') {
+                currentCat = val;
+                document.querySelectorAll('#category-list li').forEach(l => l.classList.remove('active'));
+            } else {
+                currentBrand = val;
+                document.querySelectorAll('#brand-list li').forEach(l => l.classList.remove('active'));
+            }
+            el.classList.add('active');
+
+            loadProducts();
+        }
+
+        function loadProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '<p class="text-accent">Loading...</p>';
+
+            fetchProducts(currentCat, currentBrand).then(products => {
+                if(products.length === 0) {
+                    grid.innerHTML = '<p class="text-accent">No products found matching filters.</p>';
+                    return;
+                }
+                
+                grid.innerHTML = products.map(p => `
+                    <div style="background: var(--color-primary-light); border-radius: 0.5rem; overflow: hidden; transition: transform 0.3s; height: 100%; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="height: 200px; overflow: hidden;">
+                            <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="padding: 1rem; flex: 1; display: flex; flex-direction: column;">
+                            <div style="font-size: 0.8rem; color: var(--color-accent); text-transform: uppercase;">${p.brand}</div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700;">${p.name}</h3>
+                            <p class="text-accent" style="font-size: 0.9rem; margin-bottom: 1rem; flex: 1;">${p.description}</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-cta" style="font-weight: bold; font-size: 1.1rem;">$${p.price}</span>
+                                <a href="product.html?id=${p.id}" class="btn btn-cta" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">View</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            });
+            // Removed manual catch block as fetchProducts handles errors gracefully
+        }
+        
+        // Expose filterBy to global scope if needed (though event listeners handle it)
+        window.filterBy = filterBy; 
+    </script>
+
+</body>
+</html>
