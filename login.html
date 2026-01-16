@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Auth | ShoeZone Collective</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body { 
+            justify-content: center; 
+            align-items: center; 
+            overflow: hidden;
+            background: radial-gradient(circle at center, #121212 0%, #050505 100%);
+            height: 100vh;
+        }
+        
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%);
+            filter: blur(100px);
+            z-index: -1;
+            animation: float 15s infinite alternate ease-in-out;
+            top: 50%;
+            left: 50%;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-80%, -80%); }
+            100% { transform: translate(20%, 20%); }
+        }
+
+        .auth-portal {
+            width: 1000px;
+            max-width: 95%;
+            height: 600px;
+            display: flex;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+        }
+
+        .form-container {
+            width: 50%;
+            height: 100%;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: #0a0a0a;
+        }
+
+        .sign-up-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        .auth-portal.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        .auth-portal.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 100;
+        }
+
+        .auth-portal.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(5, 5, 5, 1) 100%);
+            background-color: #050505;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .auth-portal.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .overlay-left { transform: translateX(-20%); }
+        .auth-portal.right-panel-active .overlay-left { transform: translateX(0); }
+        .overlay-right { right: 0; transform: translateX(0); }
+        .auth-portal.right-panel-active .overlay-right { transform: translateX(20%); }
+
+        /* Unique Input Styling */
+        .elite-input-group {
+            position: relative;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .elite-input-group input {
+            width: 100%;
+            padding: 1rem 0;
+            font-size: 1rem;
+            color: white;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            outline: none;
+            background: transparent;
+            transition: 0.3s;
+        }
+
+        .elite-input-group label {
+            position: absolute;
+            top: 1rem;
+            left: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+        }
+
+        .elite-input-group input:focus ~ label,
+        .elite-input-group input:valid ~ label {
+            top: -12px;
+            font-size: 0.6rem;
+            color: var(--color-primary);
+        }
+
+        .elite-input-group .bar {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .elite-input-group .bar:before {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 0px;
+            position: absolute;
+            background: var(--color-primary);
+            transition: 0.4s ease all;
+            left: 0;
+        }
+
+        .elite-input-group input:focus ~ .bar:before {
+            width: 100%;
+        }
+
+        .social-circle {
+            width: 45px;
+            height: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .social-circle:hover {
+            border-color: var(--color-primary);
+            background: rgba(239, 68, 68, 0.1);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    
+    <header style="background: transparent; border: none; backdrop-filter: none;">
+        <div class="container flex justify-between items-center">
+            <a href="index.html" class="logo">SHOE<span class="text-primary">ZONE</span></a>
+            <button class="global-back-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
+                Back
+            </button>
+        </div>
+    </header>
+
+    <div class="auth-portal" id="auth-portal">
+        <!-- Register -->
+        <div class="form-container sign-up-container">
+            <form id="register-form">
+                <h1 style="font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em;">JOIN THE <span class="text-primary">ELITE.</span></h1>
+                <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Unlock exclusive drops and personalized recommendations.</p>
+                
+                <div class="elite-input-group">
+                    <input type="text" id="reg-name" required>
+                    <span class="bar"></span>
+                    <label>Full Name</label>
+                </div>
+                <div class="elite-input-group">
+                    <input type="email" id="reg-email" required>
+                    <span class="bar"></span>
+                    <label>Email Address</label>
+                </div>
+                <div class="elite-input-group">
+                    <input type="password" id="reg-pass" required>
+                    <span class="bar"></span>
+                    <label>Set Password</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; height: 55px; border-radius: 0.5rem;">CREATE ACCOUNT</button>
+                
+                <div style="margin-top: 2rem; text-align: center;">
+                    <span style="font-size: 0.7rem; color: #444; text-transform: uppercase; letter-spacing: 0.1em;">Quick Access</span>
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+                        <div class="social-circle">G</div>
+                        <div class="social-circle">A</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Login -->
+        <div class="form-container sign-in-container">
+            <form id="login-form">
+                <h1 style="font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em;">WELCOME <span class="text-primary">BACK.</span></h1>
+                <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2.5rem;">The collective missed your presence.</p>
+                
+                <div class="elite-input-group">
+                    <input type="email" id="login-email" required>
+                    <span class="bar"></span>
+                    <label>Email Address</label>
+                </div>
+                <div class="elite-input-group">
+                    <input type="password" id="login-pass" required>
+                    <span class="bar"></span>
+                    <label>Password</label>
+                </div>
+                
+                <div style="text-align: right; margin-top: -1rem; margin-bottom: 2rem;">
+                    <a href="#" style="font-size: 0.75rem; color: var(--color-text-muted);">Forgot Security Key?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; height: 55px; border-radius: 0.5rem;">AUTHENTICATE</button>
+
+                <div style="margin-top: 2.5rem; text-align: center;">
+                    <span style="font-size: 0.7rem; color: #444; text-transform: uppercase; letter-spacing: 0.15em;">Elite Federation Sign-in</span>
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.2rem;">
+                        <div class="social-circle">G</div>
+                        <div class="social-circle">A</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sliding Panel Overlay -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h2 style="font-weight: 800; font-size: 2.2rem; margin-bottom: 1.5rem; line-height: 1;">ACCESS <br><span class="text-primary">GRANTED?</span></h2>
+                    <p style="font-size: 0.9rem; margin-bottom: 3rem; color: #888; line-height: 1.6; max-width: 300px;">If you have already established your credentials, proceed to the terminal.</p>
+                    <button class="btn btn-outline" id="signIn" style="width: 200px; border-color: var(--color-primary); color: var(--color-primary); font-weight: 800;">SIGN IN</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h2 style="font-weight: 800; font-size: 2.2rem; margin-bottom: 1.5rem; line-height: 1;">NEW <br><span class="text-primary">RECRUIT?</span></h2>
+                    <p style="font-size: 0.9rem; margin-bottom: 3rem; color: #888; line-height: 1.6; max-width: 300px;">Begin your journey into the most exclusive sneaker collective on the planet.</p>
+                    <button class="btn btn-outline" id="signUp" style="width: 200px; border-color: var(--color-primary); color: var(--color-primary); font-weight: 800;">REGISTER</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/ui-service.js"></script>
+    <script type="module">
+        import { authService } from './assets/js/auth-service.js';
+        import ui from './assets/js/ui-service.js';
+
+        const authPortal = document.getElementById('auth-portal');
+        const signUpBtn = document.getElementById('signUp');
+        const signInBtn = document.getElementById('signIn');
+
+        // Transition Logic
+        signUpBtn.onclick = () => authPortal.classList.add("right-panel-active");
+        signInBtn.onclick = () => authPortal.classList.remove("right-panel-active");
+
+        // Handle URL Hash for direct page state
+        if(window.location.hash === '#register') {
+            authPortal.classList.add("right-panel-active");
+        }
+
+        // Login Submit
+        document.getElementById('login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            const btn = e.target.querySelector('button');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span style="letter-spacing: 0.5em; font-size: 0.6rem;">VALIDATING...</span>';
+
+            const res = await authService.login(email, pass);
+            if (res.success) {
+                ui.showToast(`ACCESS GRANTED. Welcome, ${res.user.first_name}.`, 'success');
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } else {
+                ui.showToast(res.message, 'error');
+                btn.disabled = false;
+                btn.innerText = 'AUTHENTICATE';
+            }
+        };
+
+        // Register Submit
+        document.getElementById('register-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+            const btn = e.target.querySelector('button');
+
+            const [fname, ...rest] = fullName.split(' ');
+            const lname = rest.join(' ') || '';
+
+            btn.disabled = true;
+            btn.innerHTML = '<span style="letter-spacing: 0.5em; font-size: 0.6rem;">INITIALIZING...</span>';
+
+            const res = await authService.register({ first_name: fname, last_name: lname, email, password: pass });
+            if (res.success) {
+                ui.showToast('REGISTRATION COMPLETE. Please authenticate.', 'success');
+                signInBtn.click();
+                btn.disabled = false;
+                btn.innerText = 'CREATE ACCOUNT';
+            } else {
+                ui.showToast(res.message, 'error');
+                btn.disabled = false;
+                btn.innerText = 'CREATE ACCOUNT';
+            }
+        };
+    </script>
+</body>
+</html>

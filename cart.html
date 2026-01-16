@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bag | ShoeZone Collective</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container flex justify-between items-center">
+            <a href="index.html" class="logo">SHOE<span class="text-primary">ZONE</span></a>
+            <button class="global-back-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
+                Back
+            </button>
+            <a href="shop.html" class="text-muted hover:text-white" style="font-size: 0.9rem;">Continue Shopping</a>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 120px; padding-bottom: 80px;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 3rem;">YOUR <span class="text-primary">BAG.</span></h1>
+        
+        <div id="cart-wrapper" class="flex flex-col md-flex-row gap-8">
+            <div id="cart-container" style="flex: 2;">
+                 <div class="glass-card text-center" style="padding: 4rem;">
+                    <p class="text-muted">Loading your bag...</p>
+                </div>
+            </div>
+
+            <div id="cart-summary" style="flex: 1;" class="hidden">
+                <div class="glass-card" style="position: sticky; top: 120px;">
+                    <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">ORDER SUMMARY</h3>
+                    <div class="flex justify-between mb-4" style="margin-bottom: 1rem;">
+                        <span class="text-muted">Subtotal</span>
+                        <span id="summary-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-4" style="margin-bottom: 1rem;">
+                        <span class="text-muted">Estimated Shipping</span>
+                        <span class="text-primary">FREE</span>
+                    </div>
+                    <div class="flex justify-between" style="border-top: 1px solid var(--glass-border); padding-top: 1rem; margin-top: 1rem; font-weight: 800; font-size: 1.2rem;">
+                        <span>TOTAL</span>
+                        <span id="summary-total" class="text-primary">$0.00</span>
+                    </div>
+                    
+                    <button id="checkout-btn" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">CHECKOUT NOW</button>
+                    
+                    <div style="margin-top: 1.5rem; font-size: 0.75rem; text-align: center;" class="text-muted">
+                        Secure checkout powered by ShoeZone.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="assets/js/ui-service.js"></script>
+    <script type="module">
+        import { cartService } from './assets/js/cart-service.js';
+        import ui from './assets/js/ui-service.js';
+
+        const container = document.getElementById('cart-container');
+        const summary = document.getElementById('cart-summary');
+
+        function renderCart() {
+            const cart = cartService.getCart();
+            
+            if (cart.length === 0) {
+                summary.classList.add('hidden');
+                container.innerHTML = `
+                    <div class="glass-card text-center" style="padding: 4rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🛍️</div>
+                        <h2 style="margin-bottom: 1rem;">Your bag is empty.</h2>
+                        <p class="text-muted" style="margin-bottom: 2rem;">Looks like you haven't added anything to your bag yet.</p>
+                        <a href="shop.html" class="btn btn-primary">START SHOPPING</a>
+                    </div>
+                `;
+                return;
+            }
+
+            summary.classList.remove('hidden');
+            const total = cartService.getTotal();
+            document.getElementById('summary-subtotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+
+            container.innerHTML = `
+                <div class="flex flex-col gap-4">
+                    ${cart.map(item => `
+                        <div class="glass-card flex items-center gap-6" style="padding: 1rem;">
+                            <img src="${item.image}" alt="${item.name}" style="width: 120px; height: 120px; object-fit: cover; border-radius: var(--radius-md);">
+                            <div style="flex: 1;">
+                                <div class="text-primary font-bold" style="font-size: 0.7rem; text-transform: uppercase;">${item.brand || 'PREMIUM'}</div>
+                                <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem;">${item.name}</h3>
+                                <p class="text-muted" style="font-size: 0.9rem;">Selected Size: <span class="white">${item.size}</span></p>
+                                <div class="text-primary font-bold" style="margin-top: 0.5rem; font-size: 1.1rem;">$${item.price}</div>
+                            </div>
+                            <div class="flex flex-col items-end gap-4">
+                                <div class="flex items-center" style="background: rgba(255,255,255,0.05); border-radius: var(--radius-md); padding: 0.2rem;">
+                                    <button class="btn btn-outline q-btn" data-id="${item.id}" data-size="${item.size}" data-action="minus" style="padding: 0.4rem 0.8rem; border: none;">-</button>
+                                    <span style="min-width: 30px; text-align: center; font-weight: bold;">${item.quantity}</span>
+                                    <button class="btn btn-outline q-btn" data-id="${item.id}" data-size="${item.size}" data-action="plus" style="padding: 0.4rem 0.8rem; border: none;">+</button>
+                                </div>
+                                <button class="rm-btn" data-id="${item.id}" data-size="${item.size}" style="background:none; border:none; color: var(--color-text-muted); cursor:pointer; font-size: 0.8rem; text-decoration: underline;">REMOVE</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.querySelectorAll('.q-btn').forEach(btn => {
+                btn.onclick = () => {
+                    const id = parseInt(btn.dataset.id);
+                    const size = btn.dataset.size;
+                    const action = btn.dataset.action;
+                    const item = cart.find(i => i.id === id && i.size === size);
+                    if(item) {
+                        const newQ = action === 'plus' ? item.quantity + 1 : item.quantity - 1;
+                        if(newQ > 0) cartService.updateQuantity(id, size, newQ);
+                        else cartService.removeItem(id, size);
+                        renderCart();
+                    }
+                };
+            });
+
+            document.querySelectorAll('.rm-btn').forEach(btn => {
+                btn.onclick = async () => {
+                    if(await ui.confirm('Are you sure you want to remove this item?')) {
+                        cartService.removeItem(parseInt(btn.dataset.id), btn.dataset.size);
+                        renderCart();
+                    }
+                };
+            });
+
+            const checkoutBtn = document.getElementById('checkout-btn');
+            if(checkoutBtn) {
+                checkoutBtn.onclick = async () => {
+                    const confirmed = await ui.confirm('Proceed to checkout with total $' + total.toFixed(2) + '?');
+                    if(confirmed) {
+                        ui.showModal(`
+                            <div class="text-center">
+                                <div style="font-size: 4rem; margin-bottom: 2rem;">🎉</div>
+                                <h2 style="font-size: 2rem; margin-bottom: 1rem;">ORDER PLACED!</h2>
+                                <p class="text-muted" style="margin-bottom: 2.5rem;">Thank you for your purchase. We've sent a confirmation email to your account.</p>
+                                <button onclick="location.href='index.html'" class="btn btn-primary">RETURN HOME</button>
+                            </div>
+                        `);
+                        cartService.clearCart();
+                    }
+                };
+            }
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>

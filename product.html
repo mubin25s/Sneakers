@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | ShoeZone Collective</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .size-chip { padding: 0.8rem 1.2rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); background: var(--glass-bg); font-weight: 600; text-align: center; min-width: 60px; }
+        .size-chip:hover { border-color: var(--color-primary); }
+        .size-chip.active { background: var(--color-primary); border-color: var(--color-primary); color: white; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container flex justify-between items-center">
+            <a href="index.html" class="logo">SHOE<span class="text-primary">ZONE</span></a>
+            <div class="nav-actions flex gap-4">
+                <button class="global-back-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
+                    Back
+                </button>
+                <a href="cart.html" class="cart-icon">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span id="cart-count" class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 120px; padding-bottom: 80px;">
+        <div id="product-detail" class="flex flex-col md-flex-row gap-12">
+            <!-- Left: Image -->
+            <div style="flex: 1.2;">
+                 <div class="glass-card" style="padding: 1rem; position: sticky; top: 120px;">
+                     <div style="aspect-ratio: 1/1; background: var(--color-surface-light); border-radius: var(--radius-md); overflow: hidden; display:flex; align-items:center; justify-content:center;">
+                        <img id="p-image" src="" alt="Product" style="max-width: 100%; max-height: 100%; object-fit: contain; transition: var(--transition);">
+                        <span id="p-loading" class="text-muted">Analyzing sneaker data...</span>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Right: Info -->
+            <div style="flex: 1;">
+                <div class="animate-fade-in">
+                    <span id="p-brand" class="text-primary uppercase letter-spacing font-bold" style="font-size: 0.8rem; margin-bottom: 0.5rem; display: block;"></span>
+                    <h1 id="p-name" style="font-size: 3rem; line-height: 1.1; margin-bottom: 1rem; font-weight: 800;"></h1>
+                    
+                    <div id="p-price" style="font-size: 2rem; font-weight: 800; margin-bottom: 2rem;"></div>
+                    
+                    <p id="p-desc" class="text-muted" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2.5rem;"></p>
+                    
+                    <div style="margin-bottom: 2.5rem;">
+                        <h3 style="font-size: 0.75rem; font-weight: 800; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">SELECT SIZE (US)</h3>
+                        <div id="size-container" class="flex gap-2 flex-wrap">
+                            <!-- Sizes -->
+                        </div>
+                    </div>
+
+                    <button id="add-to-cart-btn" class="btn btn-primary" style="width: 100%; height: 60px; font-size: 1.1rem;">ADD TO BAG — FREE SHIPPING</button>
+                    
+                    <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="glass-card" style="padding: 1rem; font-size: 0.8rem; text-align: center;">
+                            <div style="margin-bottom: 0.5rem;">📦</div>
+                            <div class="font-bold">EXPRESS DELIVERY</div>
+                            <div class="text-muted">2-4 Business Days</div>
+                        </div>
+                        <div class="glass-card" style="padding: 1rem; font-size: 0.8rem; text-align: center;">
+                            <div style="margin-bottom: 0.5rem;">🔄</div>
+                            <div class="font-bold">30-DAY RETURNS</div>
+                            <div class="text-muted">Hassle-free guarantee</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="assets/js/ui-service.js"></script>
+    <script type="module">
+        import { fetchProducts } from './assets/js/api-service.js';
+        import { cartService } from './assets/js/cart-service.js';
+        import ui from './assets/js/ui-service.js';
+
+        let currentProduct = null;
+        let selectedSize = null;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('id');
+
+        if(pid) {
+             fetchProducts().then(products => {
+                const product = products.find(p => p.id == pid) || products[0]; 
+                
+                if(product) {
+                    currentProduct = product;
+                    document.getElementById('p-brand').innerText = product.brand;
+                    document.getElementById('p-name').innerText = product.name;
+                    document.getElementById('p-price').innerText = '$' + product.price;
+                    document.getElementById('p-desc').innerText = product.description;
+                    document.getElementById('p-image').src = product.image;
+                    document.getElementById('p-loading').style.display = 'none';
+                    
+                    generateSizes(product.category);
+                }
+            });
+        }
+
+        function generateSizes(category) {
+            const container = document.getElementById('size-container');
+            let sizes = [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12, 13];
+
+            sizes.forEach(size => {
+                const chip = document.createElement('div');
+                chip.className = 'size-chip';
+                chip.innerText = size;
+                
+                chip.onclick = () => {
+                    document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    selectedSize = size;
+                };
+
+                container.appendChild(chip);
+            });
+        }
+
+        document.getElementById('add-to-cart-btn').onclick = () => {
+            if(!currentProduct) return;
+            if(!selectedSize) {
+                ui.showToast('Please select a size first.', 'error');
+                return;
+            }
+
+            cartService.addItem(currentProduct, selectedSize);
+            ui.showToast(`${currentProduct.name} added to your bag.`, 'success');
+        };
+    </script>
+</body>
+</html>
