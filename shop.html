@@ -164,7 +164,7 @@
                         <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</h3>
                         <div class="flex justify-between items-center">
                             <span style="font-size: 1.25rem; font-weight: 800;">$${p.price}</span>
-                            <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">+ ADD</button>
+                            <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">QUICK ADD +</button>
                         </div>
                     </div>
                 </div>
@@ -191,6 +191,13 @@
         };
 
         window.addToCart = async (id) => {
+            const { authService } = await import('./assets/js/auth-service.js');
+            if (!authService.getUser()) {
+                ui.showToast('Please log in to participate in exclusive drops.', 'error');
+                setTimeout(() => window.location.href = 'login.html', 1500);
+                return;
+            }
+
             const { addToCart } = await import('./assets/js/cart-service.js');
             const p = allProducts.find(item => item.id === id);
             addToCart(p);

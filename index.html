@@ -187,7 +187,7 @@
                         <div class="product-card">
                             <div class="product-image-container">
                                 <img src="${p.image}" alt="${p.name}">
-                                <div class="quick-add" onclick="window.addToCart(${p.id})">QUICK ADD +</div>
+                                <div class="quick-add" onclick="location.href='product.html?id=${p.id}'">QUICK VIEW</div>
                             </div>
                             <div style="padding: 1.5rem;">
                                 <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em;">${p.brand}</div>
@@ -196,7 +196,7 @@
                                 </h3>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-bold" style="font-size: 1.2rem;">$${p.price}</span>
-                                    <a href="product.html?id=${p.id}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem;">DETAILS</a>
+                                    <button onclick="window.addToCart(${p.id})" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem;">QUICK ADD +</button>
                                 </div>
                             </div>
                         </div>
@@ -220,14 +220,14 @@
                 <div class="product-card animate-fade-in">
                     <div class="product-image-container">
                         <img src="${p.image}" alt="${p.name}">
-                        <div class="quick-add" onclick="window.addToCart(${p.id})">QUICK ADD +</div>
+                        <div class="quick-add" onclick="location.href='product.html?id=${p.id}'">QUICK VIEW</div>
                     </div>
                     <div style="padding: 1.5rem;">
                         <div class="text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;">${p.brand}</div>
                         <h3 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 700; height: 1.4rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${p.name}</h3>
                         <div class="flex justify-between items-center">
                             <span style="font-size: 1.2rem; font-weight: 800;">$${p.price}</span>
-                            <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">+ ADD</button>
+                            <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">QUICK ADD +</button>
                         </div>
                     </div>
                 </div>

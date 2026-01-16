@@ -62,17 +62,24 @@
             left: 0;
             z-index: 1;
             opacity: 0;
+            pointer-events: none;
+        }
+
+        .sign-in-container {
+            z-index: 2;
+        }
+
+        .auth-portal.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .auth-portal.right-panel-active .sign-up-container {
             transform: translateX(100%);
             opacity: 1;
             z-index: 5;
-        }
-
-        .auth-portal.right-panel-active .sign-in-container {
-            transform: translateX(100%);
-            opacity: 0;
+            pointer-events: all;
         }
 
         .overlay-container {
@@ -143,6 +150,8 @@
             outline: none;
             background: transparent;
             transition: 0.3s;
+            pointer-events: all;
+            cursor: text;
         }
 
         .elite-input-group label {
