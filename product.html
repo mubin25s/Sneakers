@@ -15,11 +15,17 @@
     <header>
         <div class="container flex justify-between items-center">
             <a href="index.html" class="logo">SHOE<span class="text-primary">ZONE</span></a>
-            <div class="nav-actions flex gap-4">
-                <button class="global-back-btn">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
-                    Back
-                </button>
+            <div class="nav-actions flex gap-4 items-center">
+                <a href="index.html" class="dashboard-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Dashboard
+                </a>
+
+                <a href="login.html" id="auth-link">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Login
+                </a>
+
                 <a href="cart.html" class="cart-icon">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     <span id="cart-count" class="cart-count">0</span>
@@ -77,6 +83,8 @@
     </main>
 
     <script type="module" src="assets/js/ui-service.js"></script>
+
+    <script type="module" src="assets/js/header-auth.js"></script>
     <script type="module">
         import { fetchProducts } from './assets/js/api-service.js';
         import { cartService } from './assets/js/cart-service.js';
@@ -125,7 +133,14 @@
             });
         }
 
-        document.getElementById('add-to-cart-btn').onclick = () => {
+        document.getElementById('add-to-cart-btn').onclick = async () => {
+            const { authService } = await import('./assets/js/auth-service.js');
+            if (!authService.getUser()) {
+                ui.showToast('Authentication required to secure elite drops.', 'error');
+                setTimeout(() => window.location.href = 'login.html', 1500);
+                return;
+            }
+
             if(!currentProduct) return;
             if(!selectedSize) {
                 ui.showToast('Please select a size first.', 'error');

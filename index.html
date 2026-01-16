@@ -14,13 +14,16 @@
                 SHOE<span class="text-primary">ZONE</span>
             </a>
             
-            <nav class="flex gap-8 items-center hidden md-flex">
-                <a href="shop.html" class="hover:text-primary">Shop</a>
-                <a href="about.html" class="hover:text-primary">About</a>
-            </nav>
-
-            <div class="nav-actions flex gap-4 items-center">
-                <a href="login.html" id="auth-link" class="text-muted hover:text-white">Login</a>
+            <div class="nav-actions flex gap-6 items-center">
+                <nav class="flex gap-6 items-center hidden md-flex" style="margin-right: 1rem; border-right: 1px solid var(--glass-border); padding-right: 2rem;">
+                    <a href="shop.html" class="auth-nav-link" style="background: transparent; border: none; padding: 0;">SHOP</a>
+                    <a href="about.html" class="auth-nav-link" style="background: transparent; border: none; padding: 0;">ABOUT</a>
+                </nav>
+                
+                <a href="login.html" id="auth-link">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Login
+                </a>
                 <a href="cart.html" class="cart-icon">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
@@ -146,6 +149,7 @@
     </footer>
 
     <script type="module" src="assets/js/ui-service.js"></script>
+
     <script type="module" src="assets/js/header-auth.js"></script>
     <script type="module">
         import { fetchProducts, fetchCategories } from './assets/js/api-service.js';
@@ -230,6 +234,13 @@
             `;
 
             window.addToCart = async (id) => {
+                const { authService } = await import('./assets/js/auth-service.js');
+                if (!authService.getUser()) {
+                    ui.showToast('Please login to elite collective to begin your collection.', 'error');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                    return;
+                }
+
                 const { addToCart } = await import('./assets/js/cart-service.js');
                 const products = await fetchProducts();
                 const product = products.find(p => p.id === id);
