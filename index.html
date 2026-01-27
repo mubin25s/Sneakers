@@ -34,12 +34,11 @@
         </div>
     </header>
 
-    <section id="hero-section" class="hero-section" style="padding-top: 140px; padding-bottom: 60px; position: relative; overflow: hidden; min-height: 80vh; display: flex; align-items: center;">
-        <div style="position: absolute; top: -10%; left: 50%; width: 50%; height: 70%; background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%); filter: blur(100px); pointer-events: none; opacity: 0.6;"></div>
+    <section class="hero-section" style="padding-top: 160px; padding-bottom: 80px; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -10%; left: 50%; width: 40%; height: 60%; background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%); filter: blur(100px); pointer-events: none;"></div>
         
-        <div class="container animate-fade-in" id="hero-container">
-            <!-- Default Hero Content -->
-            <div id="hero-default" style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <div class="container animate-fade-in">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
                 <span class="text-primary uppercase letter-spacing font-bold" style="font-size: 0.8rem; margin-bottom: 1rem; display: block;">NEW COLLECTION 2024</span>
                 <h1 class="hero-title" style="font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; font-weight: 800;">
                     STEP INTO THE <br><span class="text-primary">ELITE CHOICE.</span>
@@ -47,60 +46,10 @@
                 <p class="text-muted" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 3rem;">
                     Engineered for performance, styled for the street. Experience the pinnacle of sneaker technology with our Bluish-Black collection.
                 </p>
+                
                 <div class="flex justify-center gap-4">
                     <a href="shop.html" class="btn btn-primary">SHOP COLLECTION</a>
                     <a href="about.html" class="btn btn-outline">EXPLORE OUR TECH</a>
-                </div>
-            </div>
-
-            <!-- Dynamic Quick View Content (Hidden by default) -->
-            <div id="hero-quick-view" style="display: none;">
-                <div class="flex flex-col md-flex-row gap-12 items-center">
-                    <!-- Left: Large Product Image -->
-                    <div style="flex: 1; display: flex; justify-content: center;">
-                        <div class="glass-card" style="padding: 1rem; width: 100%; max-width: 450px;">
-                            <div style="aspect-ratio: 1/1; background: var(--color-surface-light); border-radius: var(--radius-md); overflow: hidden; display:flex; align-items:center; justify-content:center;">
-                                <img id="qv-image" src="" alt="Product" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right: Product Info -->
-                    <div style="flex: 1;">
-                        <span id="qv-brand" class="text-primary uppercase letter-spacing font-bold" style="font-size: 0.8rem; margin-bottom: 0.5rem; display: block;"></span>
-                        <h2 id="qv-name" style="font-size: 3.5rem; line-height: 1; margin-bottom: 1rem; font-weight: 800;"></h2>
-                        <div id="qv-price" style="font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem;"></div>
-                        <p id="qv-desc" class="text-muted" style="font-size: 1.1rem; margin-bottom: 2rem; max-width: 500px;"></p>
-                        
-                        <div style="margin-bottom: 2rem;">
-                            <h3 style="font-size: 0.7rem; font-weight: 800; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">SELECT SIZE (US)</h3>
-                            <div id="qv-size-container" class="flex gap-2 flex-wrap">
-                                <!-- Sizes dynamically populated -->
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            <button id="qv-add-to-cart" class="btn btn-primary" style="flex: 2; height: 60px; font-size: 1.1rem;">ADD TO BAG — FREE SHIPPING</button>
-                            <button onclick="window.closeQuickView()" class="btn btn-outline" style="flex: 1; height: 60px;">CLOSE</button>
-                        </div>
-
-                        <div style="margin-top: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                            <div class="flex items-center gap-3">
-                                <span style="font-size: 1.5rem;">📦</span>
-                                <div>
-                                    <div class="font-bold" style="font-size: 0.8rem;">EXPRESS DELIVERY</div>
-                                    <div class="text-muted" style="font-size: 0.7rem;">2-4 Business Days</div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span style="font-size: 1.5rem;">🔄</span>
-                                <div>
-                                    <div class="font-bold" style="font-size: 0.8rem;">30-DAY RETURNS</div>
-                                    <div class="text-muted" style="font-size: 0.7rem;">Hassle-free guarantee</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -228,7 +177,6 @@
             });
 
             fetchProducts().then(products => {
-                window.allProducts = products; // Store globally for quick access
                 const grid = document.getElementById('featured-grid');
                 const ladiesGrid = document.getElementById('ladies-grid');
                 const kidsGrid = document.getElementById('kids-grid');
@@ -237,14 +185,14 @@
                 if(featured.length > 0) {
                     grid.innerHTML = featured.map(p => `
                         <div class="product-card">
-                            <div class="product-image-container" onclick="window.openBuySection(${p.id})" style="cursor: pointer;">
+                            <div class="product-image-container">
                                 <img src="${p.image}" alt="${p.name}">
-                                <div class="quick-add" onclick="event.stopPropagation(); window.quickViewModal(${p.id})">QUICK VIEW</div>
+                                <div class="quick-add" onclick="location.href='product.html?id=${p.id}'">QUICK VIEW</div>
                             </div>
                             <div style="padding: 1.5rem;">
                                 <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em;">${p.brand}</div>
-                                <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; font-weight: 700; cursor: pointer;" onclick="window.openBuySection(${p.id})">
-                                    ${p.name}
+                                <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; font-weight: 700;">
+                                    <a href="product.html?id=${p.id}">${p.name}</a>
                                 </h3>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-bold" style="font-size: 1.2rem;">$${p.price}</span>
@@ -270,13 +218,13 @@
 
             const productCardTemplate = (p) => `
                 <div class="product-card animate-fade-in">
-                    <div class="product-image-container" onclick="window.openBuySection(${p.id})" style="cursor: pointer;">
+                    <div class="product-image-container">
                         <img src="${p.image}" alt="${p.name}">
-                        <div class="quick-add" onclick="event.stopPropagation(); window.quickViewModal(${p.id})">QUICK VIEW</div>
+                        <div class="quick-add" onclick="location.href='product.html?id=${p.id}'">QUICK VIEW</div>
                     </div>
                     <div style="padding: 1.5rem;">
                         <div class="text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;">${p.brand}</div>
-                        <h3 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 700; height: 1.4rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer;" onclick="window.openBuySection(${p.id})">${p.name}</h3>
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 700; height: 1.4rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${p.name}</h3>
                         <div class="flex justify-between items-center">
                             <span style="font-size: 1.2rem; font-weight: 800;">$${p.price}</span>
                             <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">QUICK ADD +</button>
@@ -284,102 +232,6 @@
                     </div>
                 </div>
             `;
-
-            let selectedSize = null;
-            let currentQXProduct = null;
-
-            window.quickViewModal = (id) => {
-                const p = window.allProducts.find(item => item.id === id);
-                const content = `
-                    <div class="flex flex-col md-flex-row gap-8">
-                        <div style="flex: 1; border-radius: var(--radius-md); overflow: hidden;">
-                            <img src="${p.image}" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div style="flex: 1;">
-                            <span class="text-primary font-bold">${p.brand}</span>
-                            <h2 style="font-size: 2rem; margin: 0.5rem 0 1rem;">${p.name}</h2>
-                            <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem;">$${p.price}</div>
-                            <p class="text-muted" style="margin-bottom: 2rem;">${p.description}</p>
-                            <button onclick="window.addToCart(${p.id}); ui.hideModal();" class="btn btn-primary" style="width: 100%;">ADD TO SHOPPING BAG</button>
-                        </div>
-                    </div>
-                `;
-                ui.showModal(content, { maxWidth: '800px' });
-            };
-
-            window.openBuySection = (id) => {
-                const product = window.allProducts.find(p => p.id === id);
-                if (!product) return;
-
-                currentQXProduct = product;
-                selectedSize = null;
-
-                // Update UI elements
-                document.getElementById('qv-image').src = product.image;
-                document.getElementById('qv-brand').innerText = product.brand;
-                document.getElementById('qv-name').innerText = product.name;
-                document.getElementById('qv-price').innerText = '$' + product.price;
-                document.getElementById('qv-desc').innerText = product.description;
-
-                // Populate sizes
-                const sizeContainer = document.getElementById('qv-size-container');
-                sizeContainer.innerHTML = '';
-                const sizes = [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12, 13];
-                sizes.forEach(size => {
-                    const chip = document.createElement('div');
-                    chip.className = 'size-chip'; // Assuming styles exist or will be added
-                    chip.style = 'padding: 0.8rem 1.2rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); background: var(--glass-bg); font-weight: 600; text-align: center; min-width: 50px;';
-                    chip.innerText = size;
-                    chip.onclick = () => {
-                        sizeContainer.querySelectorAll('.size-chip').forEach(c => {
-                            c.style.background = 'var(--glass-bg)';
-                            c.style.borderColor = 'var(--glass-border)';
-                            c.style.color = 'inherit';
-                        });
-                        chip.style.background = 'var(--color-primary)';
-                        chip.style.borderColor = 'var(--color-primary)';
-                        chip.style.color = 'white';
-                        selectedSize = size;
-                    };
-                    chip.classList.add('size-chip');
-                    sizeContainer.appendChild(chip);
-                });
-
-                document.getElementById('qv-add-to-cart').onclick = () => {
-                    if (!selectedSize) {
-                        ui.showToast('Please select a size first.', 'error');
-                        return;
-                    }
-                    window.addToCartWithParams(product, selectedSize);
-                };
-
-                // Show Quick View, Hide Default
-                document.getElementById('hero-default').style.display = 'none';
-                document.getElementById('hero-quick-view').style.display = 'block';
-
-                // Scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-
-            window.closeQuickView = () => {
-                document.getElementById('hero-quick-view').style.display = 'none';
-                document.getElementById('hero-default').style.display = 'block';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-
-            window.addToCartWithParams = async (product, size) => {
-                const { authService } = await import('./assets/js/auth-service.js');
-                if (!authService.getUser()) {
-                    ui.showToast('Please login to elite collective to begin your collection.', 'error');
-                    setTimeout(() => window.location.href = 'login.html', 1500);
-                    return;
-                }
-
-                const { cartService } = await import('./assets/js/cart-service.js');
-                cartService.addItem(product, size);
-                ui.showToast(`${product.name} (Size ${size}) added to cart!`, 'success');
-                window.dispatchEvent(new CustomEvent('cartUpdated'));
-            };
 
             window.addToCart = async (id) => {
                 const { authService } = await import('./assets/js/auth-service.js');
@@ -390,7 +242,7 @@
                 }
 
                 const { addToCart } = await import('./assets/js/cart-service.js');
-                const products = window.allProducts;
+                const products = await fetchProducts();
                 const product = products.find(p => p.id === id);
                 if(product) {
                     addToCart(product);
