@@ -234,8 +234,10 @@
                 const quickViewArea = document.getElementById('hero-quick-view');
                 
                 quickViewArea.innerHTML = `
-                    <div class="flex flex-col md-flex-row gap-12 items-center glass-card animate-fade-in" style="padding: 3rem; text-align: left;">
-                        <button onclick="window.closeQuickView()" class="btn btn-outline" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem; border-radius: 50%; width: 40px; height: 40px;">×</button>
+                    <div class="flex flex-col md-flex-row gap-12 items-center glass-card animate-fade-in" style="padding: 3rem; text-align: left; position: relative;">
+                        <button onclick="window.closeQuickView()" class="btn-close-qv" style="position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; border-radius: 50%; background: var(--color-surface-light); border: 1px solid var(--glass-border); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100; transition: var(--transition);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
                         
                         <div style="flex: 1; border-radius: var(--radius-lg); overflow: hidden; height: 450px;">
                             <img src="${p.image}" style="width: 100%; height: 100%; object-fit: cover;">

@@ -416,3 +416,9 @@ header {
     .grid-cols-2 { grid-template-columns: 1fr; }
 }
 
+.btn-close-qv:hover {
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    transform: rotate(90deg) scale(1.1);
+}
+
