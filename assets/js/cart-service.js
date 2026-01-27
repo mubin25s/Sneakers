@@ -71,7 +71,7 @@ export const cartService = {
         const badge = document.getElementById('cart-count');
         if(badge) {
             badge.innerText = count;
-            badge.style.display = count > 0 ? 'block' : 'none';
+            badge.style.display = count > 0 ? 'flex' : 'none';
         }
     }
 };
@@ -81,10 +81,10 @@ export const addItem = (product, size) => cartService.addItem(product, size);
 export const getCart = () => cartService.getCart();
 export const updateCartCount = () => cartService.updateCartCount();
 
-// Auto-update count on load
-document.addEventListener('DOMContentLoaded', () => {
+// Initial update on load
+if (typeof document !== 'undefined') {
     cartService.updateCartCount();
-});
+}
 
 // Sync cart across tabs
 window.addEventListener('storage', (e) => {
@@ -92,4 +92,9 @@ window.addEventListener('storage', (e) => {
         cartService.updateCartCount();
         window.dispatchEvent(new CustomEvent('cartUpdated'));
     }
+});
+
+// Also trigger on pages where it might be imported dynamically late
+window.addEventListener('load', () => {
+    cartService.updateCartCount();
 });

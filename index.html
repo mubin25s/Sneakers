@@ -34,10 +34,10 @@
         </div>
     </header>
 
-    <section class="hero-section" style="padding-top: 160px; padding-bottom: 80px; position: relative; overflow: hidden;">
+    <section class="hero-section" id="hero-section" style="padding-top: 160px; padding-bottom: 80px; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -10%; left: 50%; width: 40%; height: 60%; background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%); filter: blur(100px); pointer-events: none;"></div>
         
-        <div class="container animate-fade-in">
+        <div id="hero-default" class="container animate-fade-in">
             <div style="max-width: 800px; margin: 0 auto; text-align: center;">
                 <span class="text-primary uppercase letter-spacing font-bold" style="font-size: 0.8rem; margin-bottom: 1rem; display: block;">NEW COLLECTION 2024</span>
                 <h1 class="hero-title" style="font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; font-weight: 800;">
@@ -52,6 +52,10 @@
                     <a href="about.html" class="btn btn-outline">EXPLORE OUR TECH</a>
                 </div>
             </div>
+        </div>
+
+        <div id="hero-quick-view" class="container hidden" style="padding: 2rem 0;">
+            <!-- Content will be populated via JS -->
         </div>
     </section>
 
@@ -149,8 +153,8 @@
     </footer>
 
     <script type="module" src="assets/js/ui-service.js"></script>
-
     <script type="module" src="assets/js/header-auth.js"></script>
+    <script type="module" src="assets/js/cart-service.js"></script>
     <script type="module">
         import { fetchProducts, fetchCategories } from './assets/js/api-service.js';
         import ui from './assets/js/ui-service.js';
@@ -176,62 +180,139 @@
                 }
             });
 
+            function productCardTemplate(p) {
+                return `
+                    <div class="product-card">
+                        <div class="product-image-container" onclick="window.openBuySection(${p.id})">
+                            <img src="${p.image}" alt="${p.name}" style="cursor: pointer;">
+                            <div class="quick-add" onclick="event.stopPropagation(); window.quickViewModal(${p.id})">QUICK VIEW</div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em;">${p.brand}</div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; font-weight: 700;">
+                                <a href="javascript:void(0)" onclick="window.openBuySection(${p.id})">${p.name}</a>
+                            </h3>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold" style="font-size: 1.2rem;">$${p.price}</span>
+                                <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">QUICK ADD +</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
             fetchProducts().then(products => {
                 const grid = document.getElementById('featured-grid');
                 const ladiesGrid = document.getElementById('ladies-grid');
                 const kidsGrid = document.getElementById('kids-grid');
                 
+                window.allProducts = products; // Store for global access
+                
                 const featured = products.slice(0, 4);
                 if(featured.length > 0) {
-                    grid.innerHTML = featured.map(p => `
-                        <div class="product-card">
-                            <div class="product-image-container">
-                                <img src="${p.image}" alt="${p.name}">
-                                <div class="quick-add" onclick="location.href='product.html?id=${p.id}'">QUICK VIEW</div>
-                            </div>
-                            <div style="padding: 1.5rem;">
-                                <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em;">${p.brand}</div>
-                                <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; font-weight: 700;">
-                                    <a href="product.html?id=${p.id}">${p.name}</a>
-                                </h3>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-primary font-bold" style="font-size: 1.2rem;">$${p.price}</span>
-                                    <button onclick="window.addToCart(${p.id})" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem;">QUICK ADD +</button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
+                    grid.innerHTML = featured.map(productCardTemplate).join('');
                 }
 
                 // Populate Ladies Grid
                 const ladies = products.filter(p => p.category === 'women').reverse().slice(0, 4);
                 if(ladiesGrid && ladies.length > 0) {
-                    ladiesGrid.innerHTML = ladies.map(p => productCardTemplate(p)).join('');
+                    ladiesGrid.innerHTML = ladies.map(productCardTemplate).join('');
                 }
 
                 // Populate Kids Grid
                 const kids = products.filter(p => p.category === 'kids').reverse().slice(0, 4);
                 if(kidsGrid && kids.length > 0) {
-                    kidsGrid.innerHTML = kids.map(p => productCardTemplate(p)).join('');
+                    kidsGrid.innerHTML = kids.map(productCardTemplate).join('');
                 }
             });
 
-            const productCardTemplate = (p) => `
-                <div class="product-card animate-fade-in">
-                    <div class="product-image-container">
-                        <img src="${p.image}" alt="${p.name}">
-                        <div class="quick-add" onclick="location.href='product.html?id=${p.id}'">QUICK VIEW</div>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <div class="text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;">${p.brand}</div>
-                        <h3 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 700; height: 1.4rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${p.name}</h3>
-                        <div class="flex justify-between items-center">
-                            <span style="font-size: 1.2rem; font-weight: 800;">$${p.price}</span>
-                            <button onclick="window.addToCart(${p.id})" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">QUICK ADD +</button>
+            window.openBuySection = (id) => {
+                const p = window.allProducts.find(item => item.id === id);
+                if (!p) return;
+
+                const defaultHero = document.getElementById('hero-default');
+                const quickViewArea = document.getElementById('hero-quick-view');
+                
+                quickViewArea.innerHTML = `
+                    <div class="flex flex-col md-flex-row gap-12 items-center glass-card animate-fade-in" style="padding: 3rem; text-align: left;">
+                        <button onclick="window.closeQuickView()" class="btn btn-outline" style="position: absolute; top: 1rem; right: 1rem; padding: 0.5rem; border-radius: 50%; width: 40px; height: 40px;">×</button>
+                        
+                        <div style="flex: 1; border-radius: var(--radius-lg); overflow: hidden; height: 450px;">
+                            <img src="${p.image}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        
+                        <div style="flex: 1.2;">
+                            <span class="text-primary font-bold letter-spacing uppercase" style="font-size: 0.8rem;">${p.brand}</span>
+                            <h2 style="font-size: 3rem; font-weight: 800; margin: 0.5rem 0 1rem; line-height: 1.1;">${p.name}</h2>
+                            <div class="text-primary font-bold" style="font-size: 2rem; margin-bottom: 1.5rem;">$${p.price}</div>
+                            <p class="text-muted" style="margin-bottom: 2.5rem; font-size: 1.1rem;">${p.description}</p>
+                            
+                            <div style="margin-bottom: 2.5rem;">
+                                <h4 style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em;">SELECT YOUR SIZE (US)</h4>
+                                <div class="flex gap-2 flex-wrap" id="qv-size-container">
+                                    ${[7, 8, 9, 10, 11, 12].map(s => `
+                                        <div class="size-chip ${s === 9 ? 'active' : ''}" onclick="selectQVSize(this, '${s}')" style="padding: 0.8rem 1.2rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); background: var(--glass-bg); font-weight: 600;">${s}</div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <button onclick="window.addToCartWithParams(${p.id})" class="btn btn-primary" style="width: 100%; height: 60px; font-size: 1.1rem; border-radius: 50px;">ADD TO SHOPPING BAG</button>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+
+                defaultHero.classList.add('hidden');
+                quickViewArea.classList.remove('hidden');
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.currentSelectedSize = '9';
+            };
+
+            window.selectQVSize = (el, size) => {
+                document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+                el.classList.add('active');
+                window.currentSelectedSize = size;
+            };
+
+            window.closeQuickView = () => {
+                document.getElementById('hero-default').classList.remove('hidden');
+                document.getElementById('hero-quick-view').classList.add('hidden');
+            };
+
+            window.addToCartWithParams = async (id) => {
+                const { authService } = await import('./assets/js/auth-service.js');
+                if (!authService.getUser()) {
+                    ui.showToast('Please login to elite collective to begin your collection.', 'error');
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                    return;
+                }
+
+                const { cartService } = await import('./assets/js/cart-service.js');
+                const p = window.allProducts.find(item => item.id === id);
+                if(p) {
+                    cartService.addItem(p, window.currentSelectedSize || '9');
+                    ui.showToast(`${p.name} (Size ${window.currentSelectedSize || '9'}) added to cart!`, 'success');
+                }
+            };
+
+            window.quickViewModal = async (id) => {
+                const p = window.allProducts.find(item => item.id === id);
+                const content = `
+                    <div class="flex flex-col md-flex-row gap-8">
+                        <div style="flex: 1; border-radius: var(--radius-md); overflow: hidden; height: 350px;">
+                            <img src="${p.image}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="flex: 1;">
+                            <span class="text-primary font-bold uppercase" style="font-size: 0.7rem;">${p.brand}</span>
+                            <h2 style="font-size: 2rem; margin: 0.5rem 0 1rem; font-weight: 800;">${p.name}</h2>
+                            <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem;" class="text-primary">$${p.price}</div>
+                            <p class="text-muted" style="margin-bottom: 2rem; font-size: 0.9rem;">${p.description}</p>
+                            <button onclick="window.addToCart(${p.id}); ui.hideModal();" class="btn btn-primary" style="width: 100%;">ADD TO SHOPPING BAG</button>
+                        </div>
+                    </div>
+                `;
+                ui.showModal(content, { maxWidth: '850px' });
+            };
 
             window.addToCart = async (id) => {
                 const { authService } = await import('./assets/js/auth-service.js');
@@ -242,8 +323,7 @@
                 }
 
                 const { cartService } = await import('./assets/js/cart-service.js');
-                const products = await fetchProducts();
-                const product = products.find(p => p.id === id);
+                const product = window.allProducts.find(p => p.id === id);
                 if(product) {
                     cartService.addItem(product); // Uses default size 9
                     ui.showToast(`${product.name} added to cart!`, 'success');
