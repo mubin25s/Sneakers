@@ -4,12 +4,15 @@
 
 ---
 
-https://mubin25s.github.io/Sneakers/
 ## 📌 Overview
 
 This project represents a **static e-commerce interface** for a sneakers store. Users can browse sneaker collections, view product details, see a cart page, and navigate between store sections. While it doesn’t include a real backend or database, it demonstrates frontend layout, UI design, and user flow typical of a modern shop. It’s ideal for learning UI structure, styling, and basic interactivity.
 
 ---
+
+
+## 🔗 Live Demo
+👉 https://mubin25s.github.io/Sneakers/
 
 ## 💡 Features
 
