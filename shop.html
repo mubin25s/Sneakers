@@ -140,7 +140,7 @@
             if(type === 'category') currentCat = val;
             if(type === 'brand') currentBrand = val;
             
-            renderProducts();
+            window.renderProducts();
         };
 
          window.renderProducts = () => {
@@ -204,9 +204,9 @@
             const quickViewArea = document.getElementById('shop-quick-view');
             
             quickViewArea.innerHTML = `
-                <div class="flex flex-col md-flex-row gap-12 items-center glass-card animate-fade-in" style="padding: 3rem; text-align: left; position: relative;">
-                    <button onclick="window.closeQuickView()" class="btn-close-qv" style="position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; border-radius: 50%; background: var(--color-surface-light); border: 1px solid var(--glass-border); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100; transition: var(--transition);">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <div class="flex flex-col md-flex-row gap-12 items-center glass-card animate-fade-in" style="padding: 3rem; text-align: left; position: relative; z-index: 10;">
+                    <button onclick="window.closeQuickView()" class="btn-close-qv" style="position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; border-radius: 50%; background: var(--color-surface-light); border: 1px solid var(--glass-border); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 110; transition: var(--transition);">
+                        <svg style="pointer-events: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
                     
                     <div style="flex: 1; border-radius: var(--radius-lg); overflow: hidden; height: 450px;">
@@ -223,7 +223,7 @@
                             <h4 style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em;">SELECT YOUR SIZE (US)</h4>
                             <div class="flex gap-2 flex-wrap" id="qv-size-container">
                                 ${[7, 8, 9, 10, 11, 12].map(s => `
-                                    <div class="size-chip ${s === 9 ? 'active' : ''}" onclick="selectQVSize(this, '${s}')" style="padding: 0.8rem 1.2rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); background: var(--glass-bg); font-weight: 600;">${s}</div>
+                                    <div class="size-chip ${s === 9 ? 'active' : ''}" onclick="window.selectQVSize(this, '${s}')" style="padding: 0.8rem 1.2rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); background: var(--glass-bg); font-weight: 600;">${s}</div>
                                 `).join('')}
                             </div>
                         </div>
@@ -245,7 +245,8 @@
         };
 
         window.closeQuickView = () => {
-            document.getElementById('shop-quick-view').classList.add('hidden');
+             const q = document.getElementById('shop-quick-view');
+             if(q) q.classList.add('hidden');
         };
 
         window.addToCartWithParams = async (id) => {
