@@ -241,13 +241,12 @@
                     return;
                 }
 
-                const { addToCart } = await import('./assets/js/cart-service.js');
+                const { cartService } = await import('./assets/js/cart-service.js');
                 const products = await fetchProducts();
                 const product = products.find(p => p.id === id);
                 if(product) {
-                    addToCart(product);
+                    cartService.addItem(product); // Uses default size 9
                     ui.showToast(`${product.name} added to cart!`, 'success');
-                    window.dispatchEvent(new CustomEvent('cartUpdated'));
                 }
             };
         });

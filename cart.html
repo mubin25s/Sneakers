@@ -19,6 +19,12 @@
                     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     Continue Shopping
                 </a>
+                <a href="cart.html" class="cart-icon">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    <span id="cart-count" class="cart-count">0</span>
+                </a>
             </div>
         </div>
     </header>
@@ -98,7 +104,7 @@
                             <div style="flex: 1;">
                                 <div class="text-primary font-bold" style="font-size: 0.7rem; text-transform: uppercase;">${item.brand || 'PREMIUM'}</div>
                                 <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem;">${item.name}</h3>
-                                <p class="text-muted" style="font-size: 0.9rem;">Selected Size: <span class="white">${item.size}</span></p>
+                                <p class="text-muted" style="font-size: 0.9rem;">Selected Size: <span class="white" style="color: white; font-weight: 700;">${item.size}</span></p>
                                 <div class="text-primary font-bold" style="margin-top: 0.5rem; font-size: 1.1rem;">$${item.price}</div>
                             </div>
                             <div class="flex flex-col items-end gap-4">
@@ -122,8 +128,7 @@
                     const item = cart.find(i => i.id === id && i.size === size);
                     if(item) {
                         const newQ = action === 'plus' ? item.quantity + 1 : item.quantity - 1;
-                        if(newQ > 0) cartService.updateQuantity(id, size, newQ);
-                        else cartService.removeItem(id, size);
+                        cartService.updateQuantity(id, size, newQ);
                         renderCart();
                     }
                 };
@@ -152,11 +157,13 @@
                             </div>
                         `);
                         cartService.clearCart();
+                        renderCart();
                     }
                 };
             }
         }
 
+        window.addEventListener('cartUpdated', renderCart);
         renderCart();
     </script>
 </body>

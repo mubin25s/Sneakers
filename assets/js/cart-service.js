@@ -6,7 +6,7 @@ export const cartService = {
         return cart ? JSON.parse(cart) : [];
     },
 
-    addItem(product, size) {
+    addItem(product, size = '9') { // Default size 9 for quick adds
         let cart = this.getCart();
         // Check if item exists with same ID and Size
         const existingItem = cart.find(item => item.id === product.id && item.size === size);
@@ -23,6 +23,7 @@ export const cartService = {
         
         this.saveCart(cart);
         this.updateCartCount();
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
     },
 
     removeItem(id, size) {
@@ -42,6 +43,8 @@ export const cartService = {
             }
         }
         this.saveCart(cart);
+        this.updateCartCount();
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
     },
 
     clearCart() {
@@ -60,7 +63,7 @@ export const cartService = {
 
     getTotal() {
         const cart = this.getCart();
-        return cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+        return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
 
     updateCartCount() {
@@ -73,7 +76,20 @@ export const cartService = {
     }
 };
 
+// Export individual functions for easier access
+export const addItem = (product, size) => cartService.addItem(product, size);
+export const getCart = () => cartService.getCart();
+export const updateCartCount = () => cartService.updateCartCount();
+
 // Auto-update count on load
 document.addEventListener('DOMContentLoaded', () => {
     cartService.updateCartCount();
+});
+
+// Sync cart across tabs
+window.addEventListener('storage', (e) => {
+    if (e.key === CART_KEY) {
+        cartService.updateCartCount();
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
 });

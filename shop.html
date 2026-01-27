@@ -198,11 +198,12 @@
                 return;
             }
 
-            const { addToCart } = await import('./assets/js/cart-service.js');
+            const { cartService } = await import('./assets/js/cart-service.js');
             const p = allProducts.find(item => item.id === id);
-            addToCart(p);
-            ui.showToast(`Successfully added ${p.name} to cart.`, 'success');
-            window.dispatchEvent(new CustomEvent('cartUpdated'));
+            if(p) {
+                cartService.addItem(p); // Uses default size 9
+                ui.showToast(`Successfully added ${p.name} to cart.`, 'success');
+            }
         };
     </script>
 </body>
