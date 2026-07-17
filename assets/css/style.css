@@ -2,25 +2,25 @@
 
 :root {
     /* Premium Bluish-Black & Crimson Theme */
-    --color-bg: #050505;
-    --color-surface: #121212;
-    --color-surface-light: #1e1e1e;
-    --color-primary: #ef4444; /* Vibrant Red */
-    --color-primary-dark: #b91c1c;
-    --color-primary-glow: rgba(239, 68, 68, 0.4);
+    --color-bg: #0a0f1d; /* Rich deep navy-black */
+    --color-surface: #121829; /* Deep blue-slate card bg */
+    --color-surface-light: #1e2640;
+    --color-primary: #f43f5e; /* Premium Rose/Crimson */
+    --color-primary-dark: #e11d48;
+    --color-primary-glow: rgba(244, 63, 94, 0.4);
     
     --color-text: #f8fafc;
     --color-text-muted: #94a3b8;
     
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-blur: blur(12px);
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-blur: blur(16px);
     
     --font-main: 'Plus Jakarta Sans', sans-serif;
-    --shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    --radius-lg: 1rem;
-    --radius-md: 0.75rem;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+    --radius-lg: 1.25rem;
+    --radius-md: 0.85rem;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -288,7 +288,7 @@ header {
 
 .product-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 15px 35px rgba(244, 63, 94, 0.15), var(--shadow-soft);
     border-color: var(--color-primary);
 }
 
@@ -420,5 +420,21 @@ header {
     background: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
     transform: rotate(90deg) scale(1.1);
+}
+
+/* 3D Canvas Styles */
+#canvas-3d-container {
+    width: 100%;
+    height: 480px;
+    position: relative;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(circle at center, rgba(244, 63, 94, 0.08) 0%, transparent 70%);
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    #canvas-3d-container {
+        height: 320px;
+    }
 }
 
