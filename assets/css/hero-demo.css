@@ -1,0 +1,541 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --font-outfit: 'Outfit', sans-serif;
+    --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --bg-lime: #d6f578;
+    --bg-crimson: #ffd3d3;
+    --bg-midnight: #d5e3f7;
+    --bg-chalk: #f2f2eb;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.hero-demo-body {
+    font-family: var(--font-outfit);
+    background-color: var(--bg-lime);
+    color: #1a1e29;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+    transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Background Watermark */
+.watermark-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    user-select: none;
+}
+
+.watermark-text {
+    font-size: 28vw;
+    font-weight: 900;
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 3px rgba(0, 0, 0, 0.05);
+    text-transform: uppercase;
+    display: inline-block;
+    will-change: transform, opacity;
+}
+
+/* Header & Navigation */
+.demo-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.demo-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: #1a1e29;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.demo-logo span {
+    font-weight: 300;
+}
+
+.demo-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.demo-nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 30, 41, 0.6);
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.demo-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #1a1e29;
+    transition: var(--transition-smooth);
+}
+
+.demo-nav-link:hover {
+    color: #1a1e29;
+}
+
+.demo-nav-link:hover::after {
+    width: 100%;
+}
+
+.demo-btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.8rem 1.6rem;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1a1e29;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.demo-btn-back:hover {
+    background: #1a1e29;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Main Dashboard Wrapper */
+.dashboard-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+/* Glassmorphism Card */
+.glass-product-card {
+    position: relative;
+    width: 100%;
+    min-height: 580px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(25px) saturate(120%);
+    -webkit-backdrop-filter: blur(25px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 36px;
+    box-shadow: 
+        0 40px 100px rgba(0, 0, 0, 0.06), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    padding: 3.5rem;
+    gap: 2rem;
+    overflow: visible; /* Crucial for shoe overlap */
+    transform-style: preserve-3d;
+}
+
+/* Left Content Column */
+.card-left-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 20;
+}
+
+.brand-tag {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    color: rgba(26, 30, 41, 0.5);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.shoe-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #1a1e29;
+    margin-bottom: 1rem;
+}
+
+.price-tag {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1e29;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.price-original {
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-decoration: line-through;
+    color: rgba(26, 30, 41, 0.4);
+}
+
+.shoe-description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(26, 30, 41, 0.7);
+    max-width: 420px;
+    margin-bottom: 2rem;
+}
+
+/* Size Selector */
+.size-selector-wrap {
+    margin-bottom: 2.5rem;
+}
+
+.selector-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(26, 30, 41, 0.6);
+    margin-bottom: 0.8rem;
+}
+
+.sizes-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.size-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    color: #1a1e29;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.size-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.size-btn.active {
+    background: #1a1e29;
+    color: white;
+    border-color: #1a1e29;
+}
+
+/* Action Buttons */
+.action-buttons-wrap {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.btn-buy-now {
+    flex: 1.5;
+    padding: 1.1rem 2rem;
+    border-radius: 16px;
+    background: #1a1e29;
+    color: white;
+    border: none;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: 0 15px 30px rgba(26, 30, 41, 0.15);
+}
+
+.btn-buy-now:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(26, 30, 41, 0.25);
+    background: #000;
+}
+
+.btn-wishlist {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-wishlist:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-wishlist svg {
+    color: #1a1e29;
+    transition: transform 0.3s ease;
+}
+
+.btn-wishlist:hover svg {
+    transform: scale(1.15);
+}
+
+/* Right Interactive Column */
+.card-right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+}
+
+/* Swatches styling */
+.swatches-wrap {
+    z-index: 25;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    padding: 12px 18px;
+    border-radius: 50px;
+    display: flex;
+    gap: 12px;
+}
+
+.swatch-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.swatch-dot::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    transition: var(--transition-smooth);
+}
+
+.swatch-dot.active {
+    transform: scale(1.15);
+}
+
+.swatch-dot.active::after {
+    border-color: #1a1e29;
+}
+
+.swatch-lime { background-color: #a3e635; }
+.swatch-crimson { background-color: #f43f5e; }
+.swatch-midnight { background-color: #1e3a8a; }
+.swatch-chalk { background-color: #d6d3d1; }
+
+/* Interactive Shoe Canvas / Container */
+.shoe-display-container {
+    position: absolute;
+    width: 650px;
+    height: 450px;
+    left: -260px; /* Overlap into the left column */
+    top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    pointer-events: none; /* Let pointer events pass to container */
+    transform-style: preserve-3d;
+}
+
+.shoe-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.shoe-img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 35px 50px rgba(0, 0, 0, 0.15));
+    will-change: transform, opacity;
+}
+
+/* Shadow Glow below the shoe */
+.shoe-shadow-glow {
+    position: absolute;
+    width: 320px;
+    height: 35px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) scale(1);
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, transparent 70%);
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.7;
+    will-change: transform, opacity;
+    transition: var(--transition-smooth);
+}
+
+/* Specs Badge Panel */
+.specs-panel {
+    z-index: 20;
+    text-align: right;
+}
+
+.spec-item {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(26, 30, 41, 0.4);
+    margin-bottom: 4px;
+}
+
+.spec-val {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1e29;
+    margin-bottom: 12px;
+}
+
+/* Decorative grid pattern in background of page */
+.bg-grid-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .glass-product-card {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 2.5rem;
+    }
+    
+    .card-left-column {
+        gap: 2rem;
+    }
+    
+    .card-right-column {
+        height: 350px;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .shoe-display-container {
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 300px;
+    }
+    
+    .swatches-wrap {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+    
+    .specs-panel {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        text-align: right;
+    }
+    
+    .shoe-title {
+        font-size: 2.8rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .demo-header {
+        padding: 1.5rem;
+    }
+    
+    .demo-nav {
+        display: none; /* Hide header nav on small phones */
+    }
+    
+    .shoe-title {
+        font-size: 2.2rem;
+    }
+    
+    .action-buttons-wrap {
+        flex-direction: column;
+    }
+    
+    .btn-buy-now {
+        width: 100%;
+    }
+}

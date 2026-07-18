@@ -1,1 +1,0 @@
-import{g as a}from"./index-B7t212jl.js";document.addEventListener("DOMContentLoaded",()=>{a.from("header",{y:-100,opacity:0,duration:.8,ease:"power3.out"}),a.from("main .animate-fade-in",{opacity:0,y:40,duration:.8,ease:"power3.out"}),a.from("main img",{scale:.9,opacity:0,duration:.8,delay:.3,stagger:.15,ease:"power3.out"})});

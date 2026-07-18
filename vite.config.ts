@@ -11,6 +11,7 @@ export default defineConfig({
         login: resolve(__dirname, 'login.html'),
         product: resolve(__dirname, 'product.html'),
         shop: resolve(__dirname, 'shop.html'),
+        heroDemo: resolve(__dirname, 'hero-demo.html'),
       },
     },
   },

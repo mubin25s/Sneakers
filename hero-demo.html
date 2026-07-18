@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike Jordan Series | Elite Interactive Dashboard</title>
+    <link rel="stylesheet" href="assets/css/hero-demo.css">
+</head>
+<body class="hero-demo-body">
+    <!-- Decorative Grid Pattern -->
+    <div class="bg-grid-pattern"></div>
+
+    <!-- Background Watermark -->
+    <div class="watermark-container">
+        <div class="watermark-text" id="watermark-text">NIKE</div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="demo-header">
+        <div class="demo-logo">
+            JORDAN<span>SERIES</span>
+        </div>
+        <nav class="demo-nav">
+            <a href="#" class="demo-nav-link">Design</a>
+            <a href="#" class="demo-nav-link">Innovation</a>
+            <a href="#" class="demo-nav-link">Heritage</a>
+        </nav>
+        <button class="demo-btn-back" onclick="window.location.href='index.html'">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="transform: rotate(180deg); margin-right: 4px; display: inline-block; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+            Main Site
+        </button>
+    </header>
+
+    <!-- Dashboard Content Wrapper -->
+    <div class="dashboard-wrapper" id="dashboard-wrapper">
+        <main class="glass-product-card" id="product-card">
+            
+            <!-- Left Side Details -->
+            <section class="card-left-column">
+                <div>
+                    <div class="brand-tag">Premium Edition</div>
+                    <h1 class="shoe-title" id="shoe-title">Jordan Series .06</h1>
+                    <div class="price-tag">
+                        <span id="shoe-price">$135</span>
+                        <span class="price-original">$170</span>
+                    </div>
+                    <p class="shoe-description" id="shoe-description">
+                        Engineered with signature responsive Zoom Air cushioning, double-lasted stability wrap, and premium tumbled leather panels for maximum courtside control and off-court prestige.
+                    </p>
+                </div>
+
+                <!-- Interactive Size Selector -->
+                <div class="size-selector-wrap">
+                    <h3 class="selector-label">Select Size (US Men)</h3>
+                    <div class="sizes-grid">
+                        <button class="size-btn">8</button>
+                        <button class="size-btn">9</button>
+                        <button class="size-btn active">10</button>
+                        <button class="size-btn">11</button>
+                        <button class="size-btn">12</button>
+                    </div>
+                </div>
+
+                <!-- CTAs -->
+                <div class="action-buttons-wrap">
+                    <button class="btn-buy-now" id="btn-buy-now">Add to Bag</button>
+                    <button class="btn-wishlist">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Side Interactive Display -->
+            <section class="card-right-column">
+                
+                <!-- Swatch Panel -->
+                <div class="swatches-wrap">
+                    <div class="swatch-dot swatch-lime active" data-color="lime" title="Volt Lime"></div>
+                    <div class="swatch-dot swatch-crimson" data-color="crimson" title="Infrared Crimson"></div>
+                    <div class="swatch-dot swatch-midnight" data-color="midnight" title="Midnight Navy"></div>
+                    <div class="swatch-dot swatch-chalk" data-color="chalk" title="Chalk White"></div>
+                </div>
+
+                <!-- Shoe Overlay Container -->
+                <div class="shoe-display-container" id="shoe-display-container">
+                    <div class="shoe-image-wrapper" id="shoe-image-wrapper">
+                        <img src="assets/images/jordan/jordan-lime.png" alt="Nike Air Jordan" class="shoe-img" id="shoe-image">
+                    </div>
+                    <!-- Radial Glow Shadow -->
+                    <div class="shoe-shadow-glow" id="shoe-shadow"></div>
+                </div>
+
+                <!-- Tech Specs Summary -->
+                <div class="specs-panel">
+                    <div class="spec-item">Tech Layer</div>
+                    <div class="spec-val" id="spec-tech">Zoom Air</div>
+                    <div class="spec-item">Materials</div>
+                    <div class="spec-val" id="spec-mat">Tumbled Leather</div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Main Controller Script -->
+    <script type="module" src="assets/js/hero-demo.ts"></script>
+</body>
+</html>

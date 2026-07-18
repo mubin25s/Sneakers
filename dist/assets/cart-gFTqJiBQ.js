@@ -1,4 +1,4 @@
-import{g as s}from"./index-B7t212jl.js";import{c as e}from"./cart-service-CGQ-SGad.js";import{u as d}from"./ui-service-tqxLbaJ-.js";const c=document.getElementById("cart-container"),l=document.getElementById("cart-summary");function o(){if(!c||!l)return;const n=e.getCart();if(n.length===0){l.classList.add("hidden"),c.innerHTML=`
+import{g as s}from"./index-DzjGLEWQ.js";/* empty css              */import{c as e}from"./cart-service-CGQ-SGad.js";import{u as d}from"./ui-service-tqxLbaJ-.js";const c=document.getElementById("cart-container"),l=document.getElementById("cart-summary");function o(){if(!c||!l)return;const n=e.getCart();if(n.length===0){l.classList.add("hidden"),c.innerHTML=`
             <div class="glass-card text-center" style="padding: 4rem;">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🛍️</div>
                 <h2 style="margin-bottom: 1rem;">Your bag is empty.</h2>
